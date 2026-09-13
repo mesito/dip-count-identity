@@ -1,0 +1,62 @@
+verify_dip_count.py -- FAST TIER, consolidated from segmented runs on 13 Sep 2026 (single core)
+groups run: D1,D2,D6 | D5,D8 | D7 | D9,D3 | D4
+
+D1  Lehmer pair near t=7005: two-sided Speiser slice
+    gap=0.03770 t0=7005.081715 S_on=5631.5765 8/g^2=5629.138 h_thr=0.018845 g/2=0.018849
+  [D1  ] PASS measured=h_thr/(g/2)=0.99978, G'(0)/S_on-1=-5.8e-08, G>0:True expected=0.99978+-2e-4; |rel|<1e-6; G>0 on slice (Obs 4.3)
+
+D2  far-field identity (Prop 1.10) vs Hadamard-sum table values
+  [D2  ] PASS measured=t0=1001.877: -1.1324 vs -1.132; t0=1008.243: -1.3550 vs -1.355 expected=table of Obs 8.2 within 3e-3
+
+D6  exact-phase RS evaluator vs mpmath (dps=25)
+  [D6  ] PASS measured=E1 rms=2.9e-09; E2 rms=6.0e-11; E3 rms=5.8e-10 expected=rms < 1e-8 at all three heights (Sec 10.2)
+
+D1   PASS h_thr/(g/2)=0.99978, G'(0)/S_on-1=-5.8e-08, G>0:True
+D2   PASS t0=1001.877: -1.1324 vs -1.132; t0=1008.243: -1.3550 vs -1.355
+D6   PASS E1 rms=2.9e-09; E2 rms=6.0e-11; E3 rms=5.8e-10
+PASS=3 FAIL=0   runtime 201s
+D5  exact polynomial stress test of the persistence lemmas
+  [D5  ] PASS measured=L(i) 0/421 viol, L(ii) 0/500, L(iii k>4m) 0/3264, own-dips 19 expected=0 violations; own-dips of shallow pairs > 0 (detector live)
+
+D8  realisation margin on tight midpoints and the y/pi law (E2)
+    h0|lambda| median=0.060 max=0.657 frac<1=1.0000 ; (1-P)/y at y=0.5 = 0.315 (1/pi=0.318)
+  [D8  ] PASS measured=median=0.060 max=0.657 slope=0.315 expected=median<0.1, max<1, slope 0.318+-0.05 (Obs 11.4, 8.4)
+
+D5   PASS L(i) 0/421 viol, L(ii) 0/500, L(iii k>4m) 0/3264, own-dips 19
+D8   PASS median=0.060 max=0.657 slope=0.315
+PASS=2 FAIL=0   runtime 62s
+D7  dip census (fast tier)
+    E1 tight 37522 + ultra(mp) 0 + ctrl 20000: dips 0 anomalies 0 (11s)
+    E2 tight 3000 + ultra(mp) 3 + ctrl 2000: dips 0 anomalies 0 (59s)
+    E3 tight 2000 + ultra(mp) 3 + ctrl 1000: dips 0 anomalies 0 (69s)
+  [D7  ] PASS measured=dips=0 anomalies=0 expected=0 and 0 (Table 3)
+
+D7   PASS dips=0 anomalies=0
+PASS=1 FAIL=0   runtime 139s
+D9  parabola-threshold identity y0 = h_thr (Prop 9.3) and FE symmetry (Prop 9.2), E2
+    y0/h_thr: median=1.0035 (n=100) ; FE symmetry rel. dev.: [0. 0. 0.]
+  [D9  ] PASS measured=median y0/h_thr=1.0035; FE max rel dev=0.0e+00 expected=1.013+-0.03 (Prop 9.3 numerics); FE rel dev < 1e-3
+
+D3  transition depth at t0=1001.877 (argument principle, Obs 8.2)
+  [D3  ] PASS measured=nonreal(h=0.30)=0 nonreal(h=0.80)=2 expected=0 (dip) below h_c=0.547, 2 (pair) above
+
+D9   PASS median y0/h_thr=1.0035; FE max rel dev=0.0e+00
+D3   PASS nonreal(h=0.30)=0 nonreal(h=0.80)=2
+PASS=2 FAIL=0   runtime 55s
+D4  Davenport-Heilbronn negative control (Obs 4.4)
+    on-line zeros in (0,130): 71 ; rho1=(0.80851718245663738555 + 85.699348485377592172j) ; G'(0)=-20.159 ; S_on-2/h0^2+other=-20.191
+  [D4  ] PASS measured=G'(0)=-20.159 vs -20.191 expected=-20.16 vs -20.15 (Obs 4.4), within 0.05
+
+D4   PASS G'(0)=-20.159 vs -20.191
+PASS=1 FAIL=0   runtime 108s
+======================================================================
+  [D1  ] PASS measured=h_thr/(g/2)=0.99978, G'(0)/S_on-1=-5.8e-08, G>0:True expected=0.99978+-2e-4; |rel|<1e-6; G>0 on slice (Obs 4.3)
+  [D2  ] PASS measured=t0=1001.877: -1.1324 vs -1.132; t0=1008.243: -1.3550 vs -1.355 expected=table of Obs 8.2 within 3e-3
+  [D3  ] PASS measured=nonreal(h=0.30)=0 nonreal(h=0.80)=2 expected=0 (dip) below h_c=0.547, 2 (pair) above
+  [D4  ] PASS measured=G'(0)=-20.159 vs -20.191 expected=-20.16 vs -20.15 (Obs 4.4), within 0.05
+  [D5  ] PASS measured=L(i) 0/421 viol, L(ii) 0/500, L(iii k>4m) 0/3264, own-dips 19 expected=0 violations; own-dips of shallow pairs > 0 (detector live)
+  [D6  ] PASS measured=E1 rms=2.9e-09; E2 rms=6.0e-11; E3 rms=5.8e-10 expected=rms < 1e-8 at all three heights (Sec 10.2)
+  [D7  ] PASS measured=dips=0 anomalies=0 expected=0 and 0 (Table 3)
+  [D8  ] PASS measured=median=0.060 max=0.657 slope=0.315 expected=median<0.1, max<1, slope 0.318+-0.05 (Obs 11.4, 8.4)
+  [D9  ] PASS measured=median y0/h_thr=1.0035; FE max rel dev=0.0e+00 expected=1.013+-0.03 (Prop 9.3 numerics); FE rel dev < 1e-3
+PASS=9 FAIL=0 (fast tier; total ~565 s)
