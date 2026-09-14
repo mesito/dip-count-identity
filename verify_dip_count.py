@@ -6,19 +6,22 @@
 
 Groups (paper reference in brackets):
   D1  Lehmer pair, two-sided Speiser slice: S_on, h_thr vs g/2, G'(0) from
-      zeta vs Hadamard sum, positivity of G on the slice      [Obs 4.3]
+      zeta vs Hadamard sum, positivity of G on the slice      [Obs 4.2]
   D2  Far-field identity lambda = Z'/Z + 2t/(t^2+1/4) - Im psi/2 against
-      the independent Hadamard sums of the transition table  [Prop 1.10, Obs 8.2]
+      the independent Hadamard sums of the transition table  [Prop 1.7, Obs 8.2]
   D3  Transition depth by the argument principle at t0=1001.877:
       dip below h_c, non-real pair above                       [Obs 8.2]
-  D4  Davenport-Heilbronn negative control: curvature identity at rho_1 [Obs 4.4]
+  D4  Davenport-Heilbronn negative control: curvature identity at rho_1 [Obs 4.3]
   D5  Exact polynomial stress test of the persistence lemmas   [Thm 1.2, Sec 10.3]
   D6  Exact-phase RS evaluator against mpmath at E1/E2/E3      [Sec 10.2]
   D7  Dip census (fast: E1 tight full + controls, E2/E3 subsamples + ultra
-      spot checks in mpmath; full: everything in Table 3)      [Sec 11]
+      spot checks in mpmath; full: everything in Table 2)      [Sec 11]
   D8  Realisation margin on tight midpoints and the y/pi law   [Obs 8.4, 11.4]
   D9  Parabola-threshold identity y0 = h_thr on tight pairs and the
       functional-equation symmetry of the virtual partners     [Prop 9.3, 9.2]
+  D10 Value of zeta at the virtual partners (mpmath) and the floor-Euler
+      law (correlation with the truncated Euler product)      [Prop 9.4, Obs 9.5]
+  D11 u-structure of the partial sums X_N at their zeros        [Thm 9.8, Obs 9.9]
 
 Usage: python3 verify_dip_count.py [--full] [--groups D1,D2,...]
 Data: $RH_DATA (default ./data) with zeros6.gz, lmfdb_zeros_parsed.npy,
@@ -64,7 +67,7 @@ def Zmp(t):
 
 # ----------------------------------------------------------------- D1
 def D1():
-    print("\nD1  Lehmer pair near t=7005: two-sided Speiser slice")
+    print("\nD1  Lehmer pair near t=7005: two-sided Speiser slice (Obs 4.2)")
     mp.dps = 20
     zs = {n: mim(zetazero(n)) for n in range(6690, 6730)}
     best = min(range(6690, 6729), key=lambda n: zs[n + 1] - zs[n])
@@ -87,7 +90,7 @@ def D1():
     ok1 = abs(hthr / (g / 2) - 0.99978) < 2e-4
     ok2 = abs(Gp0 / Son - 1) < 1e-6
     check("D1", ok1 and ok2 and pos, "h_thr/(g/2)=%.5f, G'(0)/S_on-1=%.1e, G>0:%s" % (hthr / (g / 2), Gp0 / Son - 1, pos),
-          "0.99978+-2e-4; |rel|<1e-6; G>0 on slice (Obs 4.3)")
+          "0.99978+-2e-4; |rel|<1e-6; G>0 on slice (Obs 4.2)")
 
 
 # ----------------------------------------------------------------- D2
@@ -99,7 +102,7 @@ def _pair_around(t0):
 
 
 def D2():
-    print("\nD2  far-field identity (Prop 1.10) vs Hadamard-sum table values")
+    print("\nD2  far-field identity (Prop 1.7) vs Hadamard-sum table values")
     mp.dps = 20
     def Zf(t): return mre(mexp(mpc(0, 1) * siegeltheta(t)) * zeta(mpc(mpf(1) / 2, t)))
     ok = True; out = []
@@ -157,7 +160,7 @@ def D3(full):
 
 # ----------------------------------------------------------------- D4
 def D4():
-    print("\nD4  Davenport-Heilbronn negative control (Obs 4.4)")
+    print("\nD4  Davenport-Heilbronn negative control (Obs 4.3)")
     mp.dps = 20
     kappa = (msqrt(10 - 2 * msqrt(5)) - 2) / (msqrt(5) - 1)
     a = [1, kappa, -kappa, -1, 0]
@@ -184,7 +187,7 @@ def D4():
     K2 = float(2 * (y2 ** 2 - u2 ** 2) / (y2 ** 2 + u2 ** 2) ** 2)   # -K contribution of the other pair
     pred = Son - float(2 / b0 ** 2) + K2
     print("    on-line zeros in (0,130): %d ; rho1=%s ; G'(0)=%.3f ; S_on-2/h0^2+other=%.3f" % (len(zeros), rho1, Gp0, pred))
-    check("D4", abs(Gp0 - pred) < 0.05 and Gp0 < 0, "G'(0)=%.3f vs %.3f" % (Gp0, pred), "-20.16 vs -20.15 (Obs 4.4), within 0.05")
+    check("D4", abs(Gp0 - pred) < 0.05 and Gp0 < 0, "G'(0)=%.3f vs %.3f" % (Gp0, pred), "-20.16 vs -20.15 (Obs 4.3), within 0.05")
 
 
 # ----------------------------------------------------------------- D5
@@ -228,10 +231,10 @@ def D6():
     print("\nD6  exact-phase RS evaluator vs mpmath (dps=25)")
     mp.dps = 25
     ok = True; msg = []
-    for which, ks in (("E1", (1000, 500000)), ("E2", (72082, 1000)), ("E3", (503515, 1000))):
+    for which, ks in (("E1", (1000, 500000, 250000, 700000, 900000)), ("E2", (72082, 1000, 300000, 500000, 700000)), ("E3", (503515, 1000, 800000, 1200000, 1900000))):
         gam = load(which); errs = []
         for k in ks:
-            a, b = float(gam[k]), float(gam[k + 1]); d = 0.02 * (b - a); T = np.linspace(a + d, b - d, 6)
+            a, b = float(gam[k]), float(gam[k + 1]); d = 0.02 * (b - a); T = np.linspace(a + d, b - d, 8)
             errs += list(R.Z_batch_precise(T) - np.array([Zmp(x) for x in T]))
         rms = float(np.sqrt(np.mean(np.square(errs)))); msg.append("%s rms=%.1e" % (which, rms)); ok &= rms < 1e-8
     check("D6", ok, "; ".join(msg), "rms < 1e-8 at all three heights (Sec 10.2)")
@@ -265,7 +268,7 @@ def D7(full):
         total_dips += cf + cf2 + ud; total_anom += sa + sa2
         msg.append("%s tight %d + ultra(mp) %d + ctrl %d: dips %d anomalies %d (%.0fs)" % (which, band.size, len(ultra) if full else min(3, len(ultra)), ctrl_n, cf + cf2 + ud, sa + sa2, time.time() - t0))
         print("    " + msg[-1], flush=True)
-    check("D7", total_dips == 0 and total_anom == 0, "dips=%d anomalies=%d" % (total_dips, total_anom), "0 and 0 (Table 3)")
+    check("D7", total_dips == 0 and total_anom == 0, "dips=%d anomalies=%d" % (total_dips, total_anom), "0 and 0 (Table 2)")
 
 
 # ----------------------------------------------------------------- D8
@@ -286,7 +289,7 @@ def D8(full):
     med, mx = float(np.median(x)), float(x.max())
     print("    h0|lambda| median=%.3f max=%.3f frac<1=%.4f ; (1-P)/y at y=0.5 = %.3f (1/pi=0.318)" % (med, mx, np.mean(x < 1), slope))
     check("D8", med < 0.1 and mx < 1 and abs(slope - 1 / np.pi) < 0.05, "median=%.3f max=%.3f slope=%.3f" % (med, mx, slope),
-          "median<0.1, max<1, slope 0.318+-0.05 (Obs 11.4, 8.4)")
+          "median<0.1, max<1, slope 0.318+-0.05 (Obs 11.3, 8.4)")
 
 
 # ----------------------------------------------------------------- D9
@@ -328,16 +331,86 @@ def D9(full):
           "1.013+-0.03 (Prop 9.3 numerics); FE rel dev < 1e-3")
 
 
+# ----------------------------------------------------------------- D10
+def D10(full):
+    print("\nD10 value of zeta at the virtual partners (Prop 9.4) and the floor-Euler law (Obs 9.5)")
+    primes = np.array([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31], float)
+    def floors(which, n, cut=0.35, seed=23, grid=42):
+        gam = load(which); L = Lof(which); g = np.diff(gam); r = g / (TWO_PI / L); idx = np.nonzero(r < cut)[0]
+        rng = np.random.default_rng(seed); sel = np.sort(rng.choice(idx, min(n, idx.size), replace=False)); ts = np.empty(sel.size); h = np.empty(sel.size); y0 = np.empty(sel.size)
+        for i, k in enumerate(sel):
+            a, b = gam[k], gam[k + 1]; T = np.linspace(a, b, grid)[1:-1]; v = R.Z_batch_precise(T); j = int(np.argmax(np.abs(v))); ts[i] = T[j]; h[i] = abs(v[j])
+            hh = 2e-4 * (b - a); z5 = R.Z_batch_precise(np.array([ts[i] - 2 * hh, ts[i] - hh, ts[i], ts[i] + hh, ts[i] + 2 * hh]))
+            y0[i] = np.sqrt(2 * h[i] / abs((-z5[0] + 16 * z5[1] - 30 * z5[2] + 16 * z5[3] - z5[4]) / (12 * hh * hh)))
+        return gam, sel, g[sel], ts, h, y0
+    # (a) Prop 9.4 with mpmath on tight pairs of E2 (r<0.15)
+    gam, sel, gs, ts, h, y0 = floors("E2", 60 if full else 20, cut=0.15, grid=82); mp.dps = 20; rat = []
+    for i in range(sel.size):
+        zm = float(abs(zeta(mpc(mpf(0.5) - mpf(float(y0[i])), mpf(float(ts[i])))))); rat.append(zm / (2 * h[i] * (ts[i] / TWO_PI) ** (y0[i] / 2)))
+    rat = np.array(rat); med = float(np.median(rat))
+    # (b) floor-Euler correlation and per-prime coefficients
+    msg = ["Prop9.4 ratio median=%.4f (n=%d)" % (med, rat.size)]; ok = 0.95 < med < 1.05
+    for which in (("E1", "E2", "E3") if full else ("E2",)):
+        gam, sel, gs, ts, h, y0 = floors(which, 1500 if full else 800)
+        phi = np.log(h / gs ** 2); logP = (np.cos(ts[:, None] * np.log(primes)[None, :]) / np.sqrt(primes)[None, :]).sum(axis=1)
+        corr = float(np.corrcoef(phi, logP)[0, 1]); bp = np.array([2 * np.mean((phi - phi.mean()) * np.cos(ts * np.log(p))) for p in primes]); c = float(np.sum(bp / np.sqrt(primes)) / np.sum(1 / primes))
+        msg.append("%s corr=%.3f c=%.3f" % (which, corr, c)); ok &= corr > 0.8 and 0.3 < c < 1.0 and np.all(bp[:3] > 0)
+    print("    " + "; ".join(msg))
+    check("D10", ok, "; ".join(msg), "ratio 1.00+-0.05; corr(phi, log|P_31|) > 0.8 (paper 0.92/0.90/0.89), c in (0.3,1) (0.44/0.67/0.65)")
+
+
+# ----------------------------------------------------------------- D11
+def D11(full):
+    print("\nD11 u-structure of X_N at its zeros (Thm 9.8, Obs 9.9)")
+    def XN(s, N):
+        s = np.asarray(s, dtype=complex); n = np.arange(1, N + 1, dtype=float); lnn = np.log(n)
+        E = np.exp(-s[:, None] * lnn[None, :]); return E.sum(axis=1), -(E * lnn[None, :]).sum(axis=1)
+    def zeros(N, s_lo=-2.0, s_hi=1.5, t0=100.0, t1=160.0, n_s=80, step=0.08):
+        ss = np.linspace(s_lo, s_hi, n_s); tt = np.arange(t0, t1, step); S = (ss[:, None] + 1j * tt[None, :]).ravel()
+        A = np.abs(XN(S, N)[0]).reshape(n_s, -1); seeds = []
+        for i in range(1, n_s - 1):
+            row = A[i]
+            for j in range(1, row.size - 1):
+                if row[j] < row[j - 1] and row[j] < row[j + 1] and row[j] < A[i - 1, j] and row[j] < A[i + 1, j]: seeds.append(ss[i] + 1j * tt[j])
+        zs = []
+        for w in seeds:
+            w = complex(w)
+            for _ in range(60):
+                X, Xp = XN(np.array([w]), N)
+                if abs(Xp[0]) < 1e-300: break
+                d = X[0] / Xp[0]
+                if abs(d) > 0.5: d *= 0.5 / abs(d)
+                w -= d; w = complex(np.clip(w.real, s_lo - 0.2, s_hi + 0.2), w.imag)
+                if abs(d) < 1e-9: break
+            if abs(XN(np.array([w]), N)[0][0]) < 1e-8: zs.append(w)
+        out = []
+        for w in sorted(zs, key=lambda z: (z.imag, z.real)):
+            if not out or abs(w - out[-1]) > 1e-3: out.append(w)
+        return np.array(out)
+    rng = np.random.default_rng(31); ok = True; msg = []
+    for N in ((110, 500) if full else (110,)):
+        z = zeros(N); n = np.arange(1, N + 1, dtype=float); u = np.log(n / np.sqrt(N))
+        E = np.exp(-z[:, None] * u[None, :]); M0 = E.sum(axis=1); M1 = (E * u[None, :]).sum(axis=1)
+        X, Xp = XN(z, N)
+        ident = float(np.max(np.abs(np.abs(Xp) - N ** (-z.real / 2) * np.abs(M1)) / np.abs(Xp)))
+        m0 = float(np.max(np.abs(M0)))
+        rnd = rng.uniform(-2.0, 1.5, z.size) + 1j * rng.uniform(100.0, 160.0, z.size); _, Xpr = XN(rnd, N)
+        soft = float(np.exp(np.mean(np.log(np.abs(Xpr))) - np.mean(np.log(np.abs(Xp)))))
+        msg.append("N=%d: %d zeros, max|M0|=%.1e, identity rel err %.1e, <|X'|>_rand/<|X'|>_zeros = %.1fx" % (N, z.size, m0, ident, soft))
+        print("    " + msg[-1]); ok &= m0 < 1e-6 and ident < 1e-8 and soft > 2.0 and z.size > 30
+    check("D11", ok, "; ".join(msg), "M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.9)")
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--full", action="store_true"); ap.add_argument("--groups", default="")
     args = ap.parse_args()
-    groups = args.groups.split(",") if args.groups else ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9"]
+    groups = args.groups.split(",") if args.groups else ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11"]
     print("verify_dip_count.py  tier=%s  groups=%s  data=%s" % ("full" if args.full else "fast", ",".join(groups), DATA), flush=True)
     t0 = time.time()
     for gname in groups:
         f = globals()[gname]
         try:
-            f(args.full) if gname in ("D3", "D5", "D7", "D8", "D9") else f()
+            f(args.full) if gname in ("D3", "D5", "D7", "D8", "D9", "D10", "D11") else f()
         except Exception as e:
             check(gname, False, "EXCEPTION %r" % e, "-")
     print("\n" + "=" * 70)

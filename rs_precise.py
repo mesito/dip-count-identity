@@ -5,8 +5,8 @@ with the dip detector used by the census (paper Sections 10-11).
 Z_batch_precise(ts): RS main sum + Gabcke C0 and C1 terms with exact phase
 reduction: theta(T0) mod 2pi from mpmath once per 50-wide t-window + Taylor in
 delta = t - T0; ln n as double-double; T0*ln n reduced with exact fmod and a
-two-double 2pi. Verified against mpmath: rms ~4e-9 (t~7e5), 1.5e-9 (8.4e9),
-5e-10 (3.1e10).
+two-double 2pi. Verified against mpmath (suite group D6, 40 points per ensemble): rms
+2.2e-9 (t~7e5), 6.7e-11 (8.4e9), 4.6e-10 (3.1e10).
 """
 import time
 import numpy as np
