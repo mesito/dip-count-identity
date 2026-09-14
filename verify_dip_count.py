@@ -16,12 +16,12 @@ Groups (paper reference in brackets):
   D6  Exact-phase RS evaluator against mpmath at E1/E2/E3      [Sec 10.2]
   D7  Dip census (fast: E1 tight full + controls, E2/E3 subsamples + ultra
       spot checks in mpmath; full: everything in Table 2)      [Sec 11]
-  D8  Realisation margin on tight midpoints and the y/pi law   [Obs 8.4, 11.4]
+  D8  Realisation margin on tight midpoints and the y/pi law   [Obs 11.3, 8.4]
   D9  Parabola-threshold identity y0 = h_thr on tight pairs and the
       functional-equation symmetry of the virtual partners     [Prop 9.3, 9.2]
   D10 Value of zeta at the virtual partners (mpmath) and the floor-Euler
       law (correlation with the truncated Euler product)      [Prop 9.4, Obs 9.5]
-  D11 u-structure of the partial sums X_N at their zeros        [Thm 9.8, Obs 9.9]
+  D11 u-structure of the partial sums X_N at their zeros        [Thm 9.9, Obs 9.10]
 
 Usage: python3 verify_dip_count.py [--full] [--groups D1,D2,...]
 Data: $RH_DATA (default ./data) with zeros6.gz, lmfdb_zeros_parsed.npy,
@@ -361,7 +361,7 @@ def D10(full):
 
 # ----------------------------------------------------------------- D11
 def D11(full):
-    print("\nD11 u-structure of X_N at its zeros (Thm 9.8, Obs 9.9)")
+    print("\nD11 u-structure of X_N at its zeros (Thm 9.9, Obs 9.10)")
     def XN(s, N):
         s = np.asarray(s, dtype=complex); n = np.arange(1, N + 1, dtype=float); lnn = np.log(n)
         E = np.exp(-s[:, None] * lnn[None, :]); return E.sum(axis=1), -(E * lnn[None, :]).sum(axis=1)
@@ -398,7 +398,7 @@ def D11(full):
         soft = float(np.exp(np.mean(np.log(np.abs(Xpr))) - np.mean(np.log(np.abs(Xp)))))
         msg.append("N=%d: %d zeros, max|M0|=%.1e, identity rel err %.1e, <|X'|>_rand/<|X'|>_zeros = %.1fx" % (N, z.size, m0, ident, soft))
         print("    " + msg[-1]); ok &= m0 < 1e-6 and ident < 1e-8 and soft > 2.0 and z.size > 30
-    check("D11", ok, "; ".join(msg), "M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.9)")
+    check("D11", ok, "; ".join(msg), "M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.10)")
 
 
 def main():

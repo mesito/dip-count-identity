@@ -26,7 +26,7 @@ Put in `code/data/` (or point `RH_DATA` to a directory containing):
 - `lmfdb_zeros_parsed.npy` — the Platt-certified block of 772,719 zeros at t ≈ 8.436×10⁹ (E2), LMFDB zeros endpoint;
 - `lm_top_zeros.npy` — the LMFDB block of 2,000,000 zeros, indices 103,798,788,359 … 103,800,788,359 (E3).
 
-SHA-256 of the three files are listed in `MANIFEST.sha256` (Table 2 of the paper).
+SHA-256 of the three files are listed in `MANIFEST.sha256` (Table 1 of the paper).
 
 ## Usage
 
@@ -34,12 +34,12 @@ SHA-256 of the three files are listed in `MANIFEST.sha256` (Table 2 of the paper
 pip install numpy scipy mpmath matplotlib
 cd code
 python3 verify_dip_count.py                 # fast tier, ~10 min single core
-python3 verify_dip_count.py --full          # full tier: complete census of Table 3 (~2.5 h) and bisection for h_c
+python3 verify_dip_count.py --full          # full tier: complete census of Table 2 (~2.5 h) and bisection for h_c
 python3 verify_dip_count.py --groups D1,D6  # any subset
 python3 make_figures.py                     # all figures (~6 min); or: make_figures.py fig03 fig10
 ```
 
-Groups: D1 Lehmer pair / Speiser slice (Obs 4.2); D2 far-field identity (Prop 1.7); D3 transition depth by the argument principle (Obs 8.2); D4 Davenport–Heilbronn negative control (Obs 4.3); D5 exact polynomial stress test of the persistence lemmas (Thm 1.2); D6 evaluator vs mpmath (§10.2, 40 points per ensemble); D7 dip census (Table 2; fast tier = full E1 tight set + E2/E3 subsamples + ultra-tight spot checks in mpmath); D8 realisation margin and the y/π law (Obs 11.3, 8.4); D9 y₀ = h_thr identity and functional-equation symmetry (Prop 9.3, 9.2); D10 value of ζ at the virtual partners (mpmath, Prop 9.4) and the floor–Euler law (Obs 9.5); D11 u-structure of the partial sums X_N at their zeros (Thm 9.8, Obs 9.9). Every group prints measured value, expectation with tolerance, PASS/FAIL.
+Groups: D1 Lehmer pair / Speiser slice (Obs 4.2); D2 far-field identity (Prop 1.7); D3 transition depth by the argument principle (Obs 8.2); D4 Davenport–Heilbronn negative control (Obs 4.3); D5 exact polynomial stress test of the persistence lemmas (Thm 1.2); D6 evaluator vs mpmath (§10.2, 40 points per ensemble); D7 dip census (Table 2; fast tier = full E1 tight set + E2/E3 subsamples + ultra-tight spot checks in mpmath); D8 realisation margin and the y/π law (Obs 11.3, 8.4); D9 y₀ = h_thr identity and functional-equation symmetry (Prop 9.3, 9.2); D10 value of ζ at the virtual partners (mpmath, Prop 9.4) and the floor–Euler law (Obs 9.5); D11 u-structure of the partial sums X_N at their zeros (Thm 9.9, Obs 9.10). Every group prints measured value, expectation with tolerance, PASS/FAIL.
 
 ## The evaluator
 

@@ -1,4 +1,4 @@
-verify_dip_count.py -- FAST TIER, consolidated from segmented runs on 14 Sep 2026 (single core)
+verify_dip_count.py -- FAST TIER, consolidated from segmented runs on 14 Sep 2026 (single core; D11 re-run after a docstring fix)
 segments: D1,D2,D6 | D3,D4 | D5,D8 | D7 | D9,D10,D11
 
 D1  Lehmer pair near t=7005: two-sided Speiser slice (Obs 4.2)
@@ -51,14 +51,10 @@ D10 value of zeta at the virtual partners (Prop 9.4) and the floor-Euler law (Ob
     Prop9.4 ratio median=0.9928 (n=20); E2 corr=0.906 c=0.657
   [D10 ] PASS measured=Prop9.4 ratio median=0.9928 (n=20); E2 corr=0.906 c=0.657 expected=ratio 1.00+-0.05; corr(phi, log|P_31|) > 0.8 (paper 0.92/0.90/0.89), c in (0.3,1) (0.44/0.67/0.65)
 
-D11 u-structure of X_N at its zeros (Thm 9.8, Obs 9.9)
+D11 u-structure of X_N at its zeros (Thm 9.9, Obs 9.10)
     N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6x
-  [D11 ] PASS measured=N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6x expected=M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.9)
+  [D11 ] PASS measured=N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6x expected=M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.10)
 
-D9   PASS median y0/h_thr=1.0035; FE max rel dev=0.0e+00
-D10  PASS Prop9.4 ratio median=0.9928 (n=20); E2 corr=0.906 c=0.657
-D11  PASS N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6
-PASS=3 FAIL=0   runtime 48s
 ======================================================================
   [D1  ] PASS measured=h_thr/(g/2)=0.99978, G'(0)/S_on-1=-5.8e-08, G>0:True expected=0.99978+-2e-4; |rel|<1e-6; G>0 on slice (Obs 4.2)
   [D2  ] PASS measured=t0=1001.877: -1.1324 vs -1.132; t0=1008.243: -1.3550 vs -1.355 expected=table of Obs 8.2 within 3e-3
@@ -70,5 +66,5 @@ PASS=3 FAIL=0   runtime 48s
   [D8  ] PASS measured=median=0.060 max=0.657 slope=0.315 expected=median<0.1, max<1, slope 0.318+-0.05 (Obs 11.3, 8.4)
   [D9  ] PASS measured=median y0/h_thr=1.0035; FE max rel dev=0.0e+00 expected=1.013+-0.03 (Prop 9.3 numerics); FE rel dev < 1e-3
   [D10 ] PASS measured=Prop9.4 ratio median=0.9928 (n=20); E2 corr=0.906 c=0.657 expected=ratio 1.00+-0.05; corr(phi, log|P_31|) > 0.8 (paper 0.92/0.90/0.89), c in (0.3,1) (0.44/0.67/0.65)
-  [D11 ] PASS measured=N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6x expected=M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.9)
+  [D11 ] PASS measured=N=110: 45 zeros, max|M0|=4.6e-12, identity rel err 6.8e-13, <|X'|>_rand/<|X'|>_zeros = 4.6x expected=M0=0 at zeros, |X'|=N^{-s/2}|M1| exact, zeros 3-25x softer than random points (Obs 9.10)
 PASS=11 FAIL=0 (fast tier; total 579 s)
